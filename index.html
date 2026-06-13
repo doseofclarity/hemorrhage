@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCN: Obstetric Hemorrhage – Adele Pillitteri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        .transition-all { transition: all 0.3s ease; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #b91c1c; border-radius: 8px; }
+        .recall-mode .reveal-text {
+            background-color: #cbd5e1;
+            color: transparent;
+            border-radius: 0.375rem;
+            padding: 0 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            box-shadow: inset 0 0 0 1px #94a3b8;
+        }
+        .recall-mode .reveal-text:hover,
+        .recall-mode .reveal-text.revealed {
+            background-color: #fde047;
+            color: #1e293b;
+            box-shadow: none;
+        }
+        .content-section { animation: fade 0.3s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .locked-section { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+        .quiz-feedback-correct { background-color: #dcfce7; border-left: 4px solid #22c55e; }
+        .quiz-feedback-wrong { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+        .nav-btn.active { background-color: #fee2e2; color: #991b1b; border-right: 4px solid #dc2626; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { obhem: { light: '#fee2e2', DEFAULT: '#dc2626', dark: '#991b1b' } } } }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col md:flex-row font-sans text-slate-800 overflow-hidden">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-obhem-dark text-white p-4 flex justify-between items-center shadow-md z-30 shrink-0">
+        <button onclick="toggleMobileMenu()" class="text-white focus:outline-none z-40"><i class="fa-solid fa-bars text-2xl"></i></button>
+        <h1 class="font-bold text-lg absolute left-1/2 transform -translate-x-1/2 pointer-events-none"><i class="fa-solid fa-droplet mr-2"></i> Obstetric Hemorrhage</h1>
+        <div class="w-8"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-80 bg-white shadow-2xl h-full absolute md:relative z-30 transition-all duration-300 shrink-0 border-r border-slate-200 overflow-y-auto">
+        <div class="p-6 bg-gradient-to-br from-obhem-dark to-obhem text-white hidden md:block shrink-0">
+            <h1 class="font-black text-2xl tracking-wide"><i class="fa-solid fa-droplet text-obhem-light mr-2"></i> Obstetric Hemorrhage</h1>
+            <p class="text-sm text-slate-300 mt-1">Adele Pillitteri · Maternal‑Child Nursing</p>
+        </div>
+        <div class="flex-1 py-4">
+            <ul class="space-y-1 text-sm font-medium">
+                <li><button onclick="showSection('home')" id="btn-home" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors"><i class="fa-solid fa-house w-6 nav-icon"></i><i class="fa-solid fa-lock w-6 hidden text-slate-400"></i> Home / Start</button></li>
+                <li><button onclick="showSection('overview')" id="btn-overview" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-book-open w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 1. Overview & Types</button></li>
+                <li><button onclick="showSection('antepartum')" id="btn-antepartum" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-hand-holding-heart w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 2. Antepartum Hemorrhage</button></li>
+                <li><button onclick="showSection('postpartum')" id="btn-postpartum" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-hourglass-half w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 3. Postpartum Hemorrhage (4 T's)</button></li>
+                <li><button onclick="showSection('management')" id="btn-management" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-hand-holding-medical w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 4. Emergency Management & Interventions</button></li>
+                <li><button onclick="showSection('nursing')" id="btn-nursing" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-user-nurse w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 5. Nursing Role & Prevention</button></li>
+                <li><button onclick="showSection('mnemonics')" id="btn-mnemonics" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-brain w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 6. Mnemonic Appendix</button></li>
+                <li><button onclick="showSection('final_quiz_sec')" id="btn-final_quiz_sec" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors border-t border-slate-200 mt-2 locked-section"><i class="fa-solid fa-graduation-cap w-6 text-amber-500 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Final 50‑Item Exam</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 h-full overflow-y-auto bg-slate-100 relative w-full">
+        <div class="fixed top-16 md:top-4 right-4 md:right-8 z-40 flex items-center bg-white/90 backdrop-blur px-4 py-3 rounded-full shadow-lg border border-slate-200 cursor-pointer hover:bg-slate-50" onclick="toggleRecallMode()">
+            <span class="mr-3 text-sm font-bold text-slate-700 hidden md:inline"><i class="fa-solid fa-brain text-obhem mr-1"></i> Active Recall</span>
+            <span class="mr-3 text-sm font-bold text-slate-700 md:hidden"><i class="fa-solid fa-brain text-obhem"></i></span>
+            <button id="recall-toggle" class="w-12 h-6 bg-slate-300 rounded-full relative transition-colors duration-300 focus:outline-none shadow-inner pointer-events-none">
+                <div id="recall-knob" class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-300 shadow"></div>
+            </button>
+        </div>
+
+        <div class="p-4 md:p-8 max-w-6xl mx-auto pb-32">
+            <!-- HOME -->
+            <section id="home" class="content-section flex flex-col items-center justify-center min-h-[80vh] text-center block">
+                <div class="bg-gradient-to-br from-slate-800 to-obhem-dark text-white rounded-3xl shadow-2xl p-10 md:p-16 w-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 text-white opacity-5"><i class="fa-solid fa-droplet text-[20rem]"></i></div>
+                    <div class="relative z-10">
+                        <div class="bg-white/10 backdrop-blur-sm inline-block p-4 rounded-full text-obhem-light mb-6"><i class="fa-solid fa-hand-holding-heart text-5xl"></i></div>
+                        <h3 class="text-xl font-bold text-slate-300 mb-2 uppercase">Maternal‑Child Nursing · Adele Pillitteri</h3>
+                        <h1 class="text-4xl md:text-6xl font-black leading-tight drop-shadow-md">Obstetric Hemorrhage</h1>
+                        <p class="text-lg max-w-2xl mx-auto mt-6 text-slate-200">Leading cause of maternal mortality worldwide. Master antepartum (previa, abruption) and postpartum hemorrhage (4 T's), risk factors, emergency management, and nursing care.</p>
+                        <button onclick="unlockFirstSection()" class="mt-10 bg-slate-600 hover:bg-slate-500 text-white font-black py-4 px-12 rounded-full shadow-xl transition-transform hover:scale-105 text-lg flex items-center mx-auto">Begin Module <i class="fa-solid fa-arrow-right ml-3"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 1: Overview & Types -->
+            <section id="overview" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-obhem pb-3"><i class="fa-solid fa-book-open text-obhem mr-4"></i> Overview & Types of Obstetric Hemorrhage</h2>
+                    <div class="bg-obhem-light/20 border-l-4 border-obhem p-4 rounded-r mb-6">Obstetric hemorrhage is excessive bleeding during pregnancy, labor, or postpartum. It is a leading cause of maternal mortality worldwide, responsible for approximately 25% of all maternal deaths.</div>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Antepartum hemorrhage (APH):</strong> Bleeding after 20 weeks gestation before delivery. Causes: placenta previa, placental abruption, vasa previa, uterine rupture.</li>
+                        <li><strong>Intrapartum hemorrhage:</strong> Bleeding during labor (e.g., abruption, uterine rupture, vasa previa).</li>
+                        <li><strong>Postpartum hemorrhage (PPH):</strong> Bleeding after delivery. <span class="reveal-text">Early PPH (first 24h)</span> most common; <span class="reveal-text">Late PPH (24h – 12 weeks)</span>.</li>
+                    </ul>
+                    <button onclick="openQuiz('overview')" class="mt-8 w-full bg-obhem text-white font-black py-4 rounded-xl shadow-md hover:bg-obhem-dark transition-colors text-lg"><i class="fa-solid fa-list-check mr-3"></i> Take 10-Item Quiz (Unlocks next section)</button>
+                </div>
+            </section>
+
+            <!-- Section 2: Antepartum Hemorrhage -->
+            <section id="antepartum" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-obhem pb-3"><i class="fa-solid fa-hand-holding-heart text-obhem mr-4"></i> Antepartum Hemorrhage (Previa & Abruption)</h2>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div class="bg-slate-50 p-4 rounded-xl"><strong class="text-obhem">🩸 Placenta Previa</strong><br>• Painless, bright red bleeding<br>• Soft, non‑tender uterus<br>• Risk factors: prior previa, cesarean, multiparity, age >35<br>• Diagnosis: transvaginal ultrasound<br>• Management: pelvic rest, hospitalization if bleeding, corticosteroids, cesarean delivery</div>
+                        <div class="bg-slate-50 p-4 rounded-xl"><strong class="text-obhem">⚠️ Placental Abruption</strong><br>• Painful, dark red bleeding (may be concealed)<br>• Tender, rigid, board‑like uterus<br>• Risk factors: hypertension, trauma, smoking, prior abruption<br>• Diagnosis: clinical; ultrasound may show clot<br>• Management: IV access, blood transfusion, immediate delivery</div>
+                    </div>
+                    <div class="bg-amber-50 p-2 rounded-lg mt-2 text-sm">🔑 <strong>Key distinction:</strong> Previa – painless bleeding; Abruption – painful bleeding with uterine tenderness.</div>
+                    <button onclick="openQuiz('antepartum')" class="mt-8 w-full bg-obhem text-white font-black py-4 rounded-xl shadow-md hover:bg-obhem-dark transition-colors text-lg"><i class="fa-solid fa-list-check mr-3"></i> Take 10-Item Quiz (Unlocks next section)</button>
+                </div>
+            </section>
+
+            <!-- Section 3: Postpartum Hemorrhage (4 T's) -->
+            <section id="postpartum" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-obhem pb-3"><i class="fa-solid fa-hourglass-half text-obhem mr-4"></i> Postpartum Hemorrhage – The 4 T's</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-3 rounded-lg"><strong class="text-obhem">💪 Tone (Uterine Atony)</strong><br>Most common cause (70–80%). Boggy uterus. Risk factors: overdistension, prolonged labor, multiparity, magnesium, chorioamnionitis. Management: massage, oxytocin, methylergonovine, carboprost, misoprostol.</div>
+                        <div class="bg-slate-50 p-3 rounded-lg"><strong class="text-obhem">🧩 Tissue (Retained Products)</strong><br>Retained placenta or membranes. Manual removal, D&C, uterine packing.</div>
+                        <div class="bg-slate-50 p-3 rounded-lg"><strong class="text-obhem">🩹 Trauma (Lacerations, Hematoma)</strong><br>Genital tract lacerations (cervical, vaginal, perineal), uterine rupture, inversion. Repair surgically, manage hematoma with ice, drainage.</div>
+                        <div class="bg-slate-50 p-3 rounded-lg"><strong class="text-obhem">🩸 Thrombin (Coagulopathy)</strong><br>DIC, pre‑existing bleeding disorders. Treat underlying cause, replace clotting factors (FFP, cryoprecipitate, platelets).</div>
+                    </div>
+                    <div class="bg-red-50 p-2 rounded-lg mt-2 text-sm">🚨 <strong>PPH definition:</strong> Blood loss >500 mL after vaginal delivery or >1000 mL after cesarean, or any bleeding causing hemodynamic compromise.</div>
+                    <button onclick="openQuiz('postpartum')" class="mt-8 w-full bg-obhem text-white font-black py-4 rounded-xl shadow-md hover:bg-obhem-dark transition-colors text-lg"><i class="fa-solid fa-list-check mr-3"></i> Take 10-Item Quiz (Unlocks next section)</button>
+                </div>
+            </section>
+
+            <!-- Section 4: Emergency Management & Interventions -->
+            <section id="management" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-obhem pb-3"><i class="fa-solid fa-hand-holding-medical text-obhem mr-4"></i> Emergency Management & Interventions</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Initial assessment:</strong> Vital signs, fundal tone, blood loss estimation (weigh pads, count clots).</li>
+                        <li><strong>IV access:</strong> Two large‑bore (16–18G) catheters, crystalloid resuscitation (Ringer's lactate), type and crossmatch.</li>
+                        <li><strong>Uterine massage</strong> – immediately if boggy.</li>
+                        <li><strong>Medications:</strong> Oxytocin (first‑line), methylergonovine (avoid hypertension), carboprost (avoid asthma), misoprostol (rectal).</li>
+                        <li><strong>Mechanical / surgical interventions:</strong> Intrauterine balloon tamponade (Bakri), uterine artery embolization, B‑Lynch suture, hysterectomy (last resort).</li>
+                        <li><strong>Blood product replacement:</strong> PRBCs, FFP, platelets as per massive transfusion protocol.</li>
+                        <li><strong>Monitoring:</strong> Vital signs q15min, urine output, oxygen saturation, coagulation studies.</li>
+                    </ul>
+                    <button onclick="openQuiz('management')" class="mt-8 w-full bg-obhem text-white font-black py-4 rounded-xl shadow-md hover:bg-obhem-dark transition-colors text-lg"><i class="fa-solid fa-list-check mr-3"></i> Take 10-Item Quiz (Unlocks next section)</button>
+                </div>
+            </section>
+
+            <!-- Section 5: Nursing Role & Prevention -->
+            <section id="nursing" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-obhem pb-3"><i class="fa-solid fa-user-nurse text-obhem mr-4"></i> Nursing Role & Prevention</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Risk identification:</strong> Screen for risk factors (grand multiparity, prior PPH, anemia, placenta previa, abruption).</li>
+                        <li><strong>Active management of third stage:</strong> Oxytocin within 1 minute of birth, controlled cord traction, uterine massage.</li>
+                        <li><strong>Postpartum assessment:</strong> BUBBLE‑HE (Breasts, Uterus, Bladder, Bowel, Lochia, Episiotomy, Homan’s, Emotions). Fundal checks q15min first hour, then q30min, then hourly.</li>
+                        <li><strong>Emergency preparedness:</strong> Have uterotonics, IV supplies, and blood products available.</li>
+                        <li><strong>Patient education:</strong> Report heavy bleeding (>1 pad/hour), large clots, dizziness, foul discharge.</li>
+                        <li><strong>Emotional support:</strong> Hemorrhage is traumatic; provide reassurance, explain interventions, involve family.</li>
+                    </ul>
+                    <button onclick="openQuiz('nursing')" class="mt-8 w-full bg-obhem text-white font-black py-4 rounded-xl shadow-md hover:bg-obhem-dark transition-colors text-lg"><i class="fa-solid fa-list-check mr-3"></i> Take 10-Item Quiz (Unlocks next section)</button>
+                </div>
+            </section>
+
+            <!-- Section 6: Mnemonics -->
+            <section id="mnemonics" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-6 border-b-2 border-obhem pb-3"><i class="fa-solid fa-brain text-obhem mr-4"></i> Mnemonic Appendix</h2>
+                    <div class="overflow-x-auto rounded-xl border">
+                        <table class="w-full text-left text-sm md:text-base"><thead class="bg-obhem-dark text-white"><td><th class="p-3">Topic</th><th class="p-3">Mnemonic</th><th class="p-3">Meaning</th></tr></thead>
+                        <tbody><tr><td class="p-3 font-semibold">Causes of PPH</span></td><td class="font-black">T T T T</span></td><td class="reveal-text">Tone, Tissue, Trauma, Thrombin</span></td>
+                        <tr class="bg-slate-50"><td class="p-3 font-semibold">Antepartum bleeding differential</span></td><td class="font-black">P P vs A P</span></td><td class="reveal-text">Previa – Painless; Abruption – Painful</span></td>
+                        <tr><td class="p-3 font-semibold">Uterotonic medications</span></td><td class="font-black">O M C M</span></td><td class="reveal-text">Oxytocin, Methylergonovine, Carboprost, Misoprostol</span></td>
+                        <tr class="bg-slate-50"><td class="p-3 font-semibold">Risk factors for uterine atony</span></td><td class="font-black">O P M C D</span></td><td class="reveal-text">Overdistension, Prolonged labor, Multiparity, Chorioamnionitis, Drugs (magnesium, anesthetics)</span></td>
+                        <tr><td class="p-3 font-semibold">Signs of hypovolemic shock</span></td><td class="font-black">T P A C</span></td><td class="reveal-text">Tachycardia, Pallor, Anxiety, Cold/clammy skin</span></td>
+                        </tbody>
+                    </table>
+                    <button onclick="openQuiz('final_quiz')" class="mt-8 w-full bg-amber-500 text-slate-900 font-black py-4 rounded-xl shadow-md hover:bg-amber-400 text-lg"><i class="fa-solid fa-graduation-cap mr-3"></i> Take Final 50‑Item Exam</button>
+                </div>
+            </section>
+
+            <!-- Final Quiz Section -->
+            <section id="final_quiz_sec" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-8 text-center min-h-[60vh] flex flex-col justify-center items-center">
+                    <i class="fa-solid fa-graduation-cap text-8xl text-amber-400 mb-6"></i>
+                    <h2 class="text-4xl font-black text-slate-800 mb-4">Final 50‑Item Exam</h2>
+                    <p class="text-lg text-slate-600 mb-8">Covers all 5 sections. 75% required to pass.</p>
+                    <button onclick="openQuiz('final_quiz')" class="w-full max-w-md bg-obhem-dark text-white font-black py-4 rounded-xl shadow-md hover:bg-obhem text-xl">Start Final Exam</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuiz()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            <h2 id="quiz-title" class="text-3xl font-black text-slate-800 mb-2"></h2>
+            <p class="text-slate-600 mb-6 font-medium border-b pb-4">Score ≥75% to unlock next section.</p>
+            <div id="quiz-questions-container" class="space-y-4"></div>
+            <button id="quiz-submit-btn" onclick="submitQuiz()" class="mt-8 w-full bg-obhem text-white font-bold py-4 rounded-xl shadow-lg text-lg">Submit Answers</button>
+            <div id="quiz-result-container" class="hidden mt-6 p-4 rounded-xl bg-slate-100 border"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            let unlockedSections = ['home'];
+            // Quiz data – 10 questions each for 5 sections (overview, antepartum, postpartum, management, nursing)
+            const quizzes = {
+                overview: {
+                    title: "Quiz 1: Overview & Types (10 items)",
+                    next: "antepartum",
+                    questions: [
+                        { q: "What is the definition of postpartum hemorrhage (vaginal delivery)?", options: ["Blood loss >300 mL", "Blood loss >500 mL", "Blood loss >1000 mL", "Any visible bleeding"], ans: 1 },
+                        { q: "Which period is considered early postpartum hemorrhage?", options: ["First 24 hours after delivery", "24 hours to 6 weeks", "During labor", "Before 20 weeks"], ans: 0 },
+                        { q: "Obstetric hemorrhage accounts for approximately what percentage of maternal deaths?", options: ["5%", "15%", "25%", "50%"], ans: 2 },
+                        { q: "Which of the following is a cause of antepartum hemorrhage?", options: ["Uterine atony", "Placenta previa", "Endometritis", "Mastitis"], ans: 1 },
+                        { q: "The most common cause of early postpartum hemorrhage is:", options: ["Retained placenta", "Uterine atony", "Coagulopathy", "Laceration"], ans: 1 },
+                        { q: "Which type of hemorrhage occurs between 24 hours and 12 weeks postpartum?", options: ["Immediate PPH", "Late PPH", "Antepartum", "Intrapartum"], ans: 1 },
+                        { q: "A blood loss of 1200 mL after cesarean delivery is classified as:", options: ["Normal", "Postpartum hemorrhage", "Minor bleeding", "Expected"], ans: 1 },
+                        { q: "Which of the following is NOT a cause of antepartum hemorrhage?", options: ["Placenta previa", "Abruptio placentae", "Vasa previa", "Endometritis"], ans: 3 },
+                        { q: "The leading cause of maternal death worldwide is:", options: ["Preeclampsia", "Obstetric hemorrhage", "Sepsis", "Thromboembolism"], ans: 1 },
+                        { q: "Which of the following best describes early PPH definition (vaginal) used by ACOG?", options: [">500 mL regardless of symptoms", ">1000 mL or signs of hypovolemia", ">1500 mL", ">250 mL"], ans: 1 }
+                    ]
+                },
+                antepartum: {
+                    title: "Quiz 2: Antepartum Hemorrhage (10 items)",
+                    next: "postpartum",
+                    questions: [
+                        { q: "The classic presentation of placenta previa is:", options: ["Painful dark bleeding", "Painless bright red bleeding", "Green discharge", "Contractions with back pain"], ans: 1 },
+                        { q: "Placental abruption typically presents with:", options: ["Painless bleeding, soft uterus", "Sudden abdominal pain, uterine tenderness, dark bleeding", "No bleeding, hypertension only", "Fever and foul discharge"], ans: 1 },
+                        { q: "Which diagnostic test is contraindicated in suspected placenta previa?", options: ["Ultrasound", "Digital vaginal examination", "Speculum exam", "Fetal heart monitoring"], ans: 1 },
+                        { q: "Which risk factor is associated with both placenta previa and abruptio placentae?", options: ["Smoking", "Prior cesarean", "Multiparity", "All of the above"], ans: 3 },
+                        { q: "Couvelaire uterus is a complication of:", options: ["Placenta previa", "Abruptio placentae", "Uterine rupture", "Vasa previa"], ans: 1 },
+                        { q: "A patient with complete placenta previa at 36 weeks with active bleeding should be managed with:", options: ["Bed rest at home", "Immediate cesarean section", "Vaginal delivery induction", "Uterine massage"], ans: 1 },
+                        { q: "Which finding is most suggestive of placental abruption?", options: ["Uterus is soft and non‑tender", "Board‑like, tender uterus with fetal distress", "Fetal tachycardia only", "Bright red bleeding without pain"], ans: 1 },
+                        { q: "A pregnant woman with known placenta previa reports painless spotting. The nurse should first:", options: ["Discharge home", "Assess vital signs and monitor for increased bleeding, prepare for hospitalization", "Perform a digital exam", "Give tocolytics"], ans: 1 },
+                        { q: "Abruptio placentae is strongly associated with:", options: ["Gestational diabetes", "Chronic hypertension and preeclampsia", "Multiple gestation", "Advanced maternal age alone"], ans: 1 },
+                        { q: "In a patient with sudden, severe abdominal pain, rigid uterus, and absent fetal heart tones, the most likely diagnosis is:", options: ["Placenta previa", "Grade 3 abruption", "Preterm labor", "Uterine rupture"], ans: 1 }
+                    ]
+                },
+                postpartum: {
+                    title: "Quiz 3: Postpartum Hemorrhage – 4 T's (10 items)",
+                    next: "management",
+                    questions: [
+                        { q: "The most common cause of early PPH is:", options: ["Uterine atony (Tone)", "Retained placenta (Tissue)", "Lacerations (Trauma)", "Coagulopathy (Thrombin)"], ans: 0 },
+                        { q: "A boggy uterus that does not respond to massage suggests:", options: ["Uterine atony", "Retained placental fragments", "Laceration", "Coagulopathy"], ans: 0 },
+                        { q: "Which uterotonic is contraindicated in hypertensive patients?", options: ["Oxytocin", "Methylergonovine (Methergine)", "Misoprostol", "Carboprost"], ans: 1 },
+                        { q: "A patient with severe asthma should not receive which uterotonic?", options: ["Oxytocin", "Carboprost (Hemabate)", "Methylergonovine", "Misoprostol"], ans: 1 },
+                        { q: "Retained placenta is classified under which 'T'?", options: ["Tone", "Tissue", "Trauma", "Thrombin"], ans: 1 },
+                        { q: "A fourth‑degree perineal laceration would be categorized under:", options: ["Tone", "Tissue", "Trauma", "Thrombin"], ans: 2 },
+                        { q: "Disseminated intravascular coagulation (DIC) is a cause of PPH under the 'T' of:", options: ["Tone", "Tissue", "Trauma", "Thrombin"], ans: 3 },
+                        { q: "Which of the following is a risk factor for uterine atony?", options: ["Grand multiparity", "Multiple gestation", "Prolonged labor", "All of the above"], ans: 3 },
+                        { q: "The first‑line medication for uterine atony is:", options: ["Methylergonovine", "Oxytocin", "Misoprostol", "Carboprost"], ans: 1 },
+                        { q: "A patient with a boggy uterus and heavy bleeding after delivery of the placenta. The nurse should first:", options: ["Administer methylergonovine", "Call for help and massage the fundus", "Prepare for hysterectomy", "Give oxygen"], ans: 1 }
+                    ]
+                },
+                management: {
+                    title: "Quiz 4: Emergency Management & Interventions (10 items)",
+                    next: "nursing",
+                    questions: [
+                        { q: "What is the initial step in managing a patient with postpartum hemorrhage?", options: ["Administer misoprostol", "Assess vital signs and uterine tone, massage fundus if boggy", "Call for blood transfusion", "Perform bimanual compression"], ans: 1 },
+                        { q: "Which gauge IV catheter is preferred for rapid resuscitation in hemorrhage?", options: ["20G", "18G or 16G", "22G", "24G"], ans: 1 },
+                        { q: "The preferred crystalloid for initial volume resuscitation is:", options: ["Dextrose 5%", "Ringer's lactate or normal saline", "Albumin", "Hetastarch"], ans: 1 },
+                        { q: "If uterine atony persists after oxytocin, the next uterotonic is often:", options: ["Methylergonovine", "Carboprost", "Misoprostol", "All are options depending on contraindications"], ans: 3 },
+                        { q: "Intrauterine balloon tamponade (e.g., Bakri) is used for:", options: ["Lacerations", "Uterine atony unresponsive to medications", "Coagulopathy", "Retained placenta"], ans: 1 },
+                        { q: "Which of the following is a surgical intervention for PPH?", options: ["Oxytocin infusion", "B‑Lynch suture", "Uterine massage", "Cervical cerclage"], ans: 1 },
+                        { q: "Massive transfusion protocol typically includes transfusion of packed red blood cells, fresh frozen plasma, and platelets in a ratio of:", options: ["1:1:1", "2:1:1", "4:1:1", "10:1:1"], ans: 0 },
+                        { q: "The nurse should monitor for signs of hypovolemic shock which include:", options: ["Bradycardia, hypertension", "Tachycardia, hypotension, cool extremities", "Normal vital signs", "Polyuria"], ans: 1 },
+                        { q: "When a patient with PPH is on oxytocin infusion, the nurse should:", options: ["Stop if bleeding continues", "Monitor for uterine hyperstimulation and water intoxication", "Increase rate until bleeding stops regardless of side effects", "Discontinue after 1 hour"], ans: 1 },
+                        { q: "If conservative measures fail to control PPH, the definitive last resort is:", options: ["Uterine packing", "Hysterectomy", "Balloon tamponade", "Angiography with embolization"], ans: 1 }
+                    ]
+                },
+                nursing: {
+                    title: "Quiz 5: Nursing Role & Prevention (10 items)",
+                    next: "mnemonics",
+                    questions: [
+                        { q: "Active management of the third stage of labor includes:", options: ["Delayed cord clamping", "Oxytocin within 1 minute of birth, controlled cord traction, uterine massage", "Expectant management", "Immediate cord clamping and maternal pushing"], ans: 1 },
+                        { q: "During the fourth stage, fundal checks should be performed every:", options: ["5 minutes", "15 minutes for the first hour", "30 minutes", "Hourly"], ans: 1 },
+                        { q: "Which finding would the nurse report as abnormal lochia?", options: ["Moderate rubra on day 2", "Soaking more than 1 pad per hour", "Small clots", "Lochia serosa on day 5"], ans: 1 },
+                        { q: "A full bladder after delivery can contribute to PPH by:", options: ["Increasing uterine contractility", "Displacing the uterus and preventing firm contraction", "Decreasing blood flow", "Causing lacerations"], ans: 1 },
+                        { q: "The nurse should identify which patient as high risk for PPH?", options: ["Primipara, term delivery", "Multipara with twins and prolonged labor", "Gestational diabetes diet‑controlled", "Age 22, normal BMI"], ans: 1 },
+                        { q: "Patient teaching for postpartum hemorrhage prevention includes:", options: ["Report heavy bleeding (>1 pad/hour), large clots, dizziness", "Use tampons for discharge", "Avoid breastfeeding to prevent afterpains", "Stay supine"], ans: 0 },
+                        { q: "Which medication is first‑line for PPH prevention in the third stage?", options: ["Methylergonovine", "Oxytocin", "Carboprost", "Misoprostol"], ans: 1 },
+                        { q: "The nurse notes that a patient's fundus is deviated to the right and boggy. The first action should be:", options: ["Call the provider", "Assist the patient to void (full bladder) and then reassess", "Massage the fundus vigorously", "Administer carboprost"], ans: 1 },
+                        { q: "Which of the following is a late sign of hypovolemic shock?", options: ["Tachycardia", "Pale skin", "Hypotension", "Anxiety"], ans: 2 },
+                        { q: "After a PPH event, the nurse should provide:", options: ["Emotional support, explain what happened, and facilitate debriefing", "Blame the patient for not reporting earlier", "Withhold information to reduce anxiety", "Discharge immediately"], ans: 0 }
+                    ]
+                }
+            };
+            
+            // Build final 50‑item exam (10 from each of 5 sections)
+            let finalQuestions = [];
+            for(let sec of ['overview','antepartum','postpartum','management','nursing']) {
+                finalQuestions = finalQuestions.concat(quizzes[sec].questions.slice(0,10));
+            }
+            while(finalQuestions.length < 50) finalQuestions.push({ q: "What is the most common cause of early postpartum hemorrhage?", options: ["Uterine atony", "Retained placenta", "Laceration", "Coagulopathy"], ans: 0 });
+            quizzes['final_quiz'] = { title: "Final 50‑Item Exam: Obstetric Hemorrhage", next: null, questions: finalQuestions.slice(0,50) };
+            
+            // Global functions
+            window.unlockedSections = unlockedSections;
+            window.quizzes = quizzes;
+            
+            window.unlockFirstSection = function() {
+                if(!unlockedSections.includes('overview')) {
+                    unlockedSections.push('overview');
+                    updateSidebarUI();
+                }
+                showSection('overview');
+            };
+            
+            window.showSection = function(id) {
+                if(!unlockedSections.includes(id) && id !== 'home') {
+                    alert("Complete the previous section quiz (≥75%) to unlock this content.");
+                    return;
+                }
+                document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+                const target = document.getElementById(id);
+                if(target) target.classList.remove('hidden');
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                const activeBtn = document.getElementById('btn-'+id);
+                if(activeBtn) activeBtn.classList.add('active');
+                if(window.innerWidth < 768) document.getElementById('sidebar')?.classList.add('hidden');
+                document.querySelector('main').scrollTop = 0;
+            };
+            
+            function updateSidebarUI() {
+                const all = ['home','overview','antepartum','postpartum','management','nursing','mnemonics','final_quiz_sec'];
+                all.forEach(sec => {
+                    const btn = document.getElementById('btn-'+sec);
+                    if(!btn) return;
+                    const lockIcon = btn.querySelector('.fa-lock'), mainIcon = btn.querySelector('.nav-icon');
+                    if(unlockedSections.includes(sec) || sec === 'home') {
+                        btn.classList.remove('locked-section');
+                        if(lockIcon) lockIcon.classList.add('hidden');
+                        if(mainIcon) mainIcon.classList.remove('hidden');
+                    } else {
+                        btn.classList.add('locked-section');
+                        if(lockIcon) lockIcon.classList.remove('hidden');
+                        if(mainIcon) mainIcon.classList.add('hidden');
+                    }
+                });
+            }
+            
+            let currentQuiz = null;
+            window.openQuiz = function(sectionId) {
+                currentQuiz = sectionId;
+                const qd = quizzes[sectionId];
+                if(!qd) return;
+                document.getElementById('quiz-title').innerText = qd.title;
+                const container = document.getElementById('quiz-questions-container');
+                container.innerHTML = '';
+                qd.questions.forEach((q, idx) => {
+                    let html = `<div class="bg-slate-50 p-4 rounded-xl border mb-4"><p class="font-bold mb-3">${idx+1}. ${q.q}</p><div class="space-y-2">`;
+                    q.options.forEach((opt, oi) => {
+                        html += `<label class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white cursor-pointer"><input type="radio" name="q${idx}" value="${oi}" class="form-radio text-obhem"><span>${opt}</span></label>`;
+                    });
+                    html += `</div><div class="feedback-${idx} text-sm mt-2 hidden"></div></div>`;
+                    container.innerHTML += html;
+                });
+                document.getElementById('quiz-submit-btn').classList.remove('hidden');
+                document.getElementById('quiz-result-container').classList.add('hidden');
+                document.getElementById('quiz-modal').classList.remove('hidden');
+            };
+            
+            window.closeQuiz = function() { document.getElementById('quiz-modal').classList.add('hidden'); };
+            
+            window.submitQuiz = function() {
+                const qd = quizzes[currentQuiz];
+                if(!qd) return;
+                let score = 0;
+                for(let i = 0; i < qd.questions.length; i++) {
+                    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                    const isCorrect = selected && parseInt(selected.value) === qd.questions[i].ans;
+                    if(isCorrect) score++;
+                    const fbDiv = document.querySelector(`.feedback-${i}`);
+                    if(fbDiv) {
+                        fbDiv.classList.remove('hidden');
+                        const correctAns = qd.questions[i].options[qd.questions[i].ans];
+                        if(isCorrect) {
+                            fbDiv.innerHTML = `<span class="text-green-700"><i class="fa-regular fa-circle-check"></i> Correct!</span>`;
+                            fbDiv.parentElement?.classList.add('quiz-feedback-correct');
+                            fbDiv.parentElement?.classList.remove('quiz-feedback-wrong');
+                        } else {
+                            const selectedText = selected ? qd.questions[i].options[parseInt(selected.value)] : "No answer";
+                            fbDiv.innerHTML = `<span class="text-red-700"><i class="fa-regular fa-circle-xmark"></i> Incorrect. Correct: ${correctAns}. Your answer: ${selectedText}</span>`;
+                            fbDiv.parentElement?.classList.add('quiz-feedback-wrong');
+                            fbDiv.parentElement?.classList.remove('quiz-feedback-correct');
+                        }
+                    }
+                }
+                const percent = (score / qd.questions.length) * 100;
+                const resultDiv = document.getElementById('quiz-result-container');
+                const btn = document.getElementById('quiz-submit-btn');
+                btn.classList.add('hidden');
+                resultDiv.classList.remove('hidden');
+                if(percent >= 75) {
+                    if(currentQuiz === 'final_quiz') {
+                        resultDiv.innerHTML = `<div class="text-amber-500 text-6xl text-center">🏆</div><h3 class="text-2xl font-black text-center">Mastery Achieved!</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><p class="text-center text-green-700">You have mastered Obstetric Hemorrhage based on Adele Pillitteri.</p><button onclick="closeQuiz()" class="mt-4 w-full bg-obhem text-white py-2 rounded-lg">Close</button>`;
+                        return;
+                    }
+                    if(qd.next && !unlockedSections.includes(qd.next)) {
+                        unlockedSections.push(qd.next);
+                        if(qd.next === 'mnemonics') unlockedSections.push('final_quiz_sec');
+                        updateSidebarUI();
+                    }
+                    resultDiv.innerHTML = `<div class="text-green-600 text-5xl text-center">✓</div><h3 class="text-2xl font-black text-center">Passed!</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><button onclick="closeQuiz(); showSection('${qd.next}')" class="mt-4 w-full bg-green-600 text-white py-2 rounded-lg">Unlock Next Section</button>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="text-red-500 text-5xl text-center">✗</div><h3 class="text-2xl font-black text-center">Failed</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%). Need 75%.</p><button onclick="openQuiz('${currentQuiz}')" class="mt-4 w-full bg-slate-600 text-white py-2 rounded-lg">Try Again</button>`;
+                }
+            };
+            
+            window.toggleRecallMode = function() {
+                const active = !document.body.classList.contains('recall-mode');
+                const toggle = document.getElementById('recall-toggle'), knob = document.getElementById('recall-knob');
+                if(active) {
+                    document.body.classList.add('recall-mode');
+                    toggle.classList.add('bg-obhem');
+                    knob.classList.add('translate-x-6');
+                } else {
+                    document.body.classList.remove('recall-mode');
+                    toggle.classList.remove('bg-obhem');
+                    knob.classList.remove('translate-x-6');
+                }
+            };
+            
+            window.toggleMobileMenu = function() {
+                const s = document.getElementById('sidebar');
+                if(s.classList.contains('hidden')) s.classList.remove('hidden');
+                else s.classList.add('hidden');
+            };
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                updateSidebarUI();
+                document.querySelectorAll('.reveal-text').forEach(el => {
+                    el.addEventListener('click', function() {
+                        if(document.body.classList.contains('recall-mode')) this.classList.toggle('revealed');
+                    });
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
